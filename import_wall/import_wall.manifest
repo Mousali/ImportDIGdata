@@ -1,0 +1,9 @@
+{
+	"autodeskProduct":	"Fusion",
+	"type":	"script",
+	"author":	"Ammar Mousali",
+	"description":	{
+		"import_wall":	"Import Centroid Digitized wall XYZ data"
+	},
+	"supportedOS":	"windows|mac"
+}

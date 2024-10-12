@@ -1,9 +1,9 @@
 {
 	"autodeskProduct":	"Fusion",
 	"type":	"script",
-	"author":	"",
+	"author":	"Ammar Mousali",
 	"description":	{
-		"":	""
+		"ImportDIG_grid":	"Import Centroid Digitization grid XYZ data"
 	},
 	"supportedOS":	"windows|mac"
 }

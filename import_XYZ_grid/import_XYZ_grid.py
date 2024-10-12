@@ -1,6 +1,10 @@
-import adsk.core, adsk.fusion, traceback
 import io
+import re
+import traceback
 from copy import copy
+
+import adsk.core
+import adsk.fusion
 
 
 def run(context):
@@ -26,15 +30,13 @@ def run(context):
 
         filename = dlg.filename
         with io.open(filename, "r", encoding="utf-8-sig") as f:
-            line = f.readline()
-
             first_spline = True
             points = []
             splines = []
-
-            while line:
-                if line[0] in [";", ":", "M", "G"]:
-                    line = f.readline()
+            for line in f:
+                if line.lstrip() == "":
+                    continue
+                if line.lstrip()[0] in [";", ":", "M", "G"]:
                     continue
 
                 pntStrArr = line.split(" ")
@@ -46,17 +48,26 @@ def run(context):
                         splines.append(copy(points))
                         points.clear()
 
-                    x_current = float(pntStrArr[0][1:])
-                    y_current = float(pntStrArr[1][1:])
-                    z_current = float(pntStrArr[2][1:])
+                    current_y = round(float(pntStrArr[1][1:]) / 10, 2)
 
+                    p = (
+                        round(float(pntStrArr[0][1:]) / 10, 2),
+                        current_y,
+                        round(float(pntStrArr[2][1:]) / 10, 2),
+                    )
                 else:
-                    x_current = float(pntStrArr[0][1:])
-                    z_current = float(pntStrArr[1][1:])
+                    p = (
+                        round(float(pntStrArr[0][1:]) / 10, 2),
+                        current_y,
+                        round(float(pntStrArr[1][1:]) / 10, 2),
+                    )
 
-                points.append((x_current, y_current, z_current))
-
-                line = f.readline()
+                if len(points) == 0:
+                    points.append(p)
+                elif points[-1] == p:
+                    continue
+                else:
+                    points.append(p)
 
             splines.append(copy(points))
 
